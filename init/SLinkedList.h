@@ -65,42 +65,110 @@ public:
     }
 
     void add(T e) override {
-        // TODO Q1
+        tail->data=e;
+        Node* newTail= new Node;
+        tail->next=newTail;
+        newTail->next=head;
+        tail=newTail;
+        count++;
         (void)e;
         throw logic_error("TODO Q1: SLinkedList::add");
     }
 
     void add(int index, T e) override {
-        // TODO Q1
+        if(index < 0 || index > count){
+            return;
+        }
+        if(index==count){
+            add(e);
+            return;
+        }
+
+        Node* newNode = new Node;
+        newNode->data = e;
+        Node* prev = head->next;
+        for(int i=0; i<index-1; i++){
+            prev=prev->next;
+        }
+        newNode->next=prev->next;
+        prev->next=newNode;
+        count++;
+
         (void)index; (void)e;
         throw logic_error("TODO Q1: SLinkedList::add(index, e)");
     }
 
     T removeAt(int index) override {
-        // TODO Q1
+        if(index<0 || index>=count){
+            return;
+        }
+        Node* prev=head->next;
+        for(int i=0; i<index-1; i++){
+            prev=prev->next;
+        }
+        Node* tmp=prev->next;
+        T data = tmp->data;
+        prev->next=prev->next->next;
+        delete tmp;
+        count--;
+        return data
         (void)index;
         throw logic_error("TODO Q1: SLinkedList::removeAt");
     }
 
     bool removeItem(T item, void (*removeItemData)(T) = 0) override {
-        // TODO Q1
+        Node* prev = head;
+        while(prev->next != tail){
+            if(equals(prev->next->data, item, itemEqual)){
+                Node* tmp= prev->next;
+                prev->next=prev->next->next;
+                T data = tmp->data;
+                delete tmp;
+                count--;
+                if(removeItemData){
+                    removeItemData(data);
+                }
+                return true;
+            }
+            prev=prev->next;
+        }
+        return false;
         (void)item; (void)removeItemData;
         throw logic_error("TODO Q1: SLinkedList::removeItem");
     }
 
     void clear() override {
-        // TODO Q1
+        removeInternalData();
+        head->next=tail;
+        tial->next=head;
+        count=0;
         throw logic_error("TODO Q1: SLinkedList::clear");
     }
 
     T& get(int index) override {
-        // TODO Q1
+        if(index<0 || index>=count){
+            return;
+        }
+        Node* cur=head->next;
+        for(int i=0; i<index; i++){
+            cur=cur->next;
+        }
+        return cur->data;
         (void)index;
         throw logic_error("TODO Q1: SLinkedList::get");
     }
 
     int indexOf(T item) override {
-        // TODO Q1
+        Node* cur=head->next;
+        int index=0;
+        while(cur!=tail){
+            if(equals(cur->data, item, itemEqual)){
+                return index;
+            }
+            cur=cur->next;
+            index++;
+        }
+        return -1;
         (void)item;
         throw logic_error("TODO Q1: SLinkedList::indexOf");
     }
