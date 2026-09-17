@@ -71,13 +71,13 @@ public:
         newTail->next=head;
         tail=newTail;
         count++;
-        (void)e;
-        throw logic_error("TODO Q1: SLinkedList::add");
+        //(void)e;
+        //throw logic_error("TODO Q1: SLinkedList::add");
     }
 
     void add(int index, T e) override {
         if(index < 0 || index > count){
-            return;
+            throw out_of_range("Index out of bounds");
         }
         if(index==count){
             add(e);
@@ -86,24 +86,24 @@ public:
 
         Node* newNode = new Node;
         newNode->data = e;
-        Node* prev = head->next;
-        for(int i=0; i<index-1; i++){
+        Node* prev = head;
+        for(int i=0; i<index; i++){
             prev=prev->next;
         }
         newNode->next=prev->next;
         prev->next=newNode;
         count++;
 
-        (void)index; (void)e;
-        throw logic_error("TODO Q1: SLinkedList::add(index, e)");
+        //(void)index; (void)e;
+        //throw logic_error("TODO Q1: SLinkedList::add(index, e)");
     }
 
     T removeAt(int index) override {
         if(index<0 || index>=count){
-            return;
+            throw out_of_range("Index out of bounds");
         }
-        Node* prev=head->next;
-        for(int i=0; i<index-1; i++){
+        Node* prev=head;
+        for(int i=0; i<index; i++){
             prev=prev->next;
         }
         Node* tmp=prev->next;
@@ -111,9 +111,9 @@ public:
         prev->next=prev->next->next;
         delete tmp;
         count--;
-        return data
-        (void)index;
-        throw logic_error("TODO Q1: SLinkedList::removeAt");
+        return data;
+        //(void)index;
+        //throw logic_error("TODO Q1: SLinkedList::removeAt");
     }
 
     bool removeItem(T item, void (*removeItemData)(T) = 0) override {
@@ -133,29 +133,29 @@ public:
             prev=prev->next;
         }
         return false;
-        (void)item; (void)removeItemData;
-        throw logic_error("TODO Q1: SLinkedList::removeItem");
+        //(void)item; (void)removeItemData;
+        //throw logic_error("TODO Q1: SLinkedList::removeItem");
     }
 
     void clear() override {
         removeInternalData();
         head->next=tail;
-        tial->next=head;
+        tail->next=head;
         count=0;
-        throw logic_error("TODO Q1: SLinkedList::clear");
+        //throw logic_error("TODO Q1: SLinkedList::clear");
     }
 
     T& get(int index) override {
         if(index<0 || index>=count){
-            return;
+            throw out_of_range("Index out of bounds");
         }
         Node* cur=head->next;
         for(int i=0; i<index; i++){
             cur=cur->next;
         }
         return cur->data;
-        (void)index;
-        throw logic_error("TODO Q1: SLinkedList::get");
+        //(void)index;
+        //throw logic_error("TODO Q1: SLinkedList::get");
     }
 
     int indexOf(T item) override {
@@ -169,8 +169,8 @@ public:
             index++;
         }
         return -1;
-        (void)item;
-        throw logic_error("TODO Q1: SLinkedList::indexOf");
+        //(void)item;
+        //throw logic_error("TODO Q1: SLinkedList::indexOf");
     }
 
     bool empty() override { return count == 0; }
