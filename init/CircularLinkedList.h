@@ -48,44 +48,150 @@ public:
     }
 
     void add(T e) override {
-        // TODO Q2
-        (void)e;
-        throw logic_error("TODO Q2: CircularLinkedList::add");
+        Node* newNode = new Node(e);
+        if(this->empty()){
+            head=newNode;
+            tail=newNode;
+            newNode->next=newNode;
+            count++;
+            return;
+        }
+        tail->next=newNode;
+        newNode->next=head;
+        tail=newNode;
+        count++;
+        //(void)e;
+        //throw logic_error("TODO Q2: CircularLinkedList::add");
     }
 
     void add(int index, T e) override {
-        // TODO Q2
-        (void)index; (void)e;
-        throw logic_error("TODO Q2: CircularLinkedList::add(index, e)");
+        if(index<0 || index>count){
+            throw out_of_range("Index out of bounds");
+        }
+        if(index==count){
+            add(e);
+            return;
+        }
+        Node* newNode = new Node(e);
+        if(index==0){
+            newNode->next=head;
+            tail->next=newNode;
+            head=newNode;
+            count++;
+            return;
+        }
+        Node* prev=head;
+        for(int i=0; i<index-1; i++){
+            prev=prev->next;
+        }
+        newNode->next=prev->next;
+        prev->next=newNode;
+        count++;
+        //(void)index; (void)e;
+        //throw logic_error("TODO Q2: CircularLinkedList::add(index, e)");
     }
 
     T removeAt(int index) override {
-        // TODO Q2
-        (void)index;
-        throw logic_error("TODO Q2: CircularLinkedList::removeAt");
+        if(index<0 || index>=count){
+            throw out_of_range("Index out of bounds");
+        }
+        if(count==1){
+            Node *tmp=head;
+            T value=tmp->data;
+            head=tail=nullptr;
+            delete tmp;
+            count--;
+            return value;
+        }
+        if(index==0){
+            Node *tmp=head;
+            T value=tmp->data;
+            head=tmp->next;
+            tail->next=head;
+            delete tmp;
+            count--;
+            return value;
+        }
+
+        Node* prev=head;
+        for(int i=0; i<index-1; i++){
+            prev=prev->next;
+        }
+        Node *tmp=prev->next;
+        T value=tmp->data;
+        prev->next=tmp->next;
+        if(index==count-1){
+            tail=prev;
+        }
+        delete tmp;
+        count--;
+        return value;
+        //(void)index;
+        //throw logic_error("TODO Q2: CircularLinkedList::removeAt");
     }
 
     bool removeItem(T item, void (*removeItemData)(T) = 0) override {
-        // TODO Q2
-        (void)item; (void)removeItemData;
-        throw logic_error("TODO Q2: CircularLinkedList::removeItem");
+        if(count==0) return 0;
+        Node *prev=tail;
+        Node *cur=head;
+        for(int i=0; i<count; i++){
+            if(equals(cur->data, item, itemEqual)){
+                if(count==1){
+                    head=tail=nullptr;
+                }
+                else{
+                    prev->next=cur->next;
+                    if(i==0) head=prev->next;
+                    if(i==count-1) tail=prev;
+                }
+                T value=cur->data;
+                delete cur;
+                count--;
+                if(removeItemData){
+                    removeItemData(value);
+                }
+                return true;
+            }
+            prev=prev->next;
+            cur=cur->next;
+        }
+        return 0;
+        //(void)item; (void)removeItemData;
+        //throw logic_error("TODO Q2: CircularLinkedList::removeItem");
     }
 
     void clear() override {
-        // TODO Q2
-        throw logic_error("TODO Q2: CircularLinkedList::clear");
+        removeInternalData();
+        //throw logic_error("TODO Q2: CircularLinkedList::clear");
     }
 
     T& get(int index) override {
-        // TODO Q2
-        (void)index;
-        throw logic_error("TODO Q2: CircularLinkedList::get");
+        if(index<0 || index>=count){
+            throw out_of_range("Index out of bounds");
+        }
+        Node *cur=head;
+        for(int i=0; i<index; i++){
+            cur=cur->next;
+        }
+        return cur->data;
+        //(void)index;
+        //throw logic_error("TODO Q2: CircularLinkedList::get");
     }
 
     int indexOf(T item) override {
-        // TODO Q2
-        (void)item;
-        throw logic_error("TODO Q2: CircularLinkedList::indexOf");
+        if(count==0){
+            return -1;
+        }
+        Node *cur=head;
+        for(int i=0; i<count; i++){
+            if(equals(cur->data, item, itemEqual)){
+                return i;
+            }
+            cur=cur->next;
+        }
+        return -1;
+        //(void)item;
+        //throw logic_error("TODO Q2: CircularLinkedList::indexOf");
     }
 
     bool empty() override { return count == 0; }
