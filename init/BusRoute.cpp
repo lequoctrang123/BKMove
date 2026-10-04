@@ -79,3 +79,12 @@ int BusRoute::getHopCount(string fromStopId, string toStopId, Direction directio
     //(void)fromStopId; (void)toStopId; (void)direction;
     //throw logic_error("TODO Q3: BusRoute::getHopCount");
 }
+
+int BusRoute::indexStop(string stopId, Direction direction) {
+    for(int i=0; i<getStopCount(direction); i++){
+        if(getStop(i, direction).getId()==stopId){
+            return i;
+        }
+    }
+    return -1;
+}

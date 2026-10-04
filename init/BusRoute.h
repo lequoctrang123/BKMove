@@ -28,6 +28,7 @@ public:
     int getStopCount(Direction direction);
     BusStop& getStop(int index, Direction direction);
     int getHopCount(string fromStopId, string toStopId, Direction direction);
+    int indexStop(string stopId, Direction direction);
 };
 
 #endif
